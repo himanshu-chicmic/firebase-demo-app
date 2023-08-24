@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -17,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Vz9-m2-cPA">
-                                <rect key="frame" x="0.0" y="103" width="393" height="715"/>
+                                <rect key="frame" x="0.0" y="103" width="393" height="680.66666666666663"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="tableCell" id="x3W-ae-UBU" customClass="TableViewCell" customModule="Firestore_Demo_App" customModuleProvider="target">
@@ -66,32 +67,49 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="xqO-Xv-Gii"/>
                                 </connections>
                             </tableView>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="PrB-kD-PZ6">
-                                <rect key="frame" x="24" y="763" width="345" height="32"/>
-                                <segments>
-                                    <segment title="1"/>
-                                    <segment title="2"/>
-                                    <segment title="3"/>
-                                </segments>
-                                <connections>
-                                    <action selector="segmentChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="erT-v3-2TL"/>
-                                </connections>
-                            </segmentedControl>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="8da-dO-ydP">
+                                <rect key="frame" x="12" y="783.66666666666663" width="369" height="34.333333333333371"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1d8-UQ-gMa">
+                                        <rect key="frame" x="0.0" y="0.0" width="74" height="34.333333333333336"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Prev" imagePadding="6">
+                                            <imageReference key="image" image="chevron.left" catalog="system" symbolScale="small" variableValue="0.0"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="previousButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="JY8-Fi-d4B"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="857-aU-FuX">
+                                        <rect key="frame" x="293.66666666666669" y="0.0" width="75.333333333333314" height="34.333333333333336"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" imagePlacement="trailing" title="Next" imagePadding="6">
+                                            <imageReference key="image" image="chevron.right" catalog="system" symbolScale="small"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="nextButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="DGR-vs-akQ"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PrB-kD-PZ6" secondAttribute="trailing" constant="24" id="FYh-gP-XC6"/>
-                            <constraint firstItem="Vz9-m2-cPA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IJF-mx-jYm"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Vz9-m2-cPA" secondAttribute="bottom" id="SFr-Pi-fGG"/>
-                            <constraint firstItem="Vz9-m2-cPA" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Us7-I8-i4V"/>
-                            <constraint firstItem="PrB-kD-PZ6" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="24" id="arw-fj-vE9"/>
-                            <constraint firstItem="Vz9-m2-cPA" firstAttribute="bottom" secondItem="PrB-kD-PZ6" secondAttribute="bottom" constant="24" id="hvS-Ad-H3e"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Vz9-m2-cPA" secondAttribute="trailing" id="qa9-b5-2jR"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8da-dO-ydP" secondAttribute="trailing" constant="12" id="4gk-Cn-VHV"/>
+                            <constraint firstItem="8da-dO-ydP" firstAttribute="top" secondItem="Vz9-m2-cPA" secondAttribute="bottom" id="5dJ-TD-I1p"/>
+                            <constraint firstItem="Vz9-m2-cPA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="7RO-aJ-gGc"/>
+                            <constraint firstItem="Vz9-m2-cPA" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="SvA-Ya-6Lp"/>
+                            <constraint firstItem="8da-dO-ydP" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="12" id="aPS-Yw-Dgj"/>
+                            <constraint firstItem="Vz9-m2-cPA" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="eDc-0r-gzc"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="8da-dO-ydP" secondAttribute="bottom" id="sqN-gM-VZC"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Employee Data" id="jhD-i0-4mw"/>
                     <connections>
+                        <outlet property="nextPage" destination="857-aU-FuX" id="2Rc-qr-swq"/>
+                        <outlet property="prevPage" destination="1d8-UQ-gMa" id="Vy3-uy-BHF"/>
+                        <outlet property="statckView" destination="8da-dO-ydP" id="E6B-1W-wA8"/>
                         <outlet property="tableView" destination="Vz9-m2-cPA" id="it7-3L-Q9K"/>
                         <segue destination="6Pe-oa-mMa" kind="show" identifier="showDetail" id="QSa-AV-ffO"/>
                         <segue destination="aCP-Ga-nrD" kind="show" identifier="addData" id="EOl-M1-HD8"/>
@@ -290,6 +308,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="chevron.left" catalog="system" width="97" height="128"/>
+        <image name="chevron.right" catalog="system" width="97" height="128"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

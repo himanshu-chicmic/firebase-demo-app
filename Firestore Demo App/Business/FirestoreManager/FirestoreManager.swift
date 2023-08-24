@@ -19,9 +19,7 @@ class FirestoreManager {
     // array to store employee list
     private var employeeList: [[String: Any]] = []
     
-    private var lastDocumentSnapshot: QuerySnapshot?
-    
-    private var pagingEnabled: Bool = true
+    private var lastDocumentSnapshot: [QuerySnapshot] = []
     
     // getter propetry for employee list
     var getEmployeeList: [EmployeeModel] {
@@ -46,17 +44,11 @@ class FirestoreManager {
     
     /// method to get data from firestore
     func getData(completion: @escaping (Bool) -> Void) {
-        var query = pagingEnabled ? db.collection("EmployeeList").limit(to: 5) : db.collection("EmployeeList")
-        
-        if let last = lastDocumentSnapshot?.documents.last {
-            query = query.start(afterDocument: last)
-        }
-        
+        let query = db.collection("EmployeeList")
         query.getDocuments() { (querySnapshot, err) in
                 if let err = err {
                     print("Error getting documents: \(err)")
                 } else {
-                    self.lastDocumentSnapshot = querySnapshot
                     self.employeeList = []
                     for document in querySnapshot!.documents {
                         var data = document.data()
@@ -69,21 +61,51 @@ class FirestoreManager {
         }
     }
     
-    /// method to listen changes in firestore and get data
-    func readDataOnChange(completion: @escaping (Bool) -> Void) {
-        var query = pagingEnabled ? db.collection("EmployeeList").limit(to: 5) : db.collection("EmployeeList")
+    /// get data based on pagination
+    /// - Parameters:
+    ///   - index: index of page
+    func getPaginatedData(limit: Int, index: Int, completion: @escaping (Bool, Int) -> Void) {
+        var query = db.collection("EmployeeList").limit(to: limit).order(by: "name")
         
-        if let last = lastDocumentSnapshot?.documents.last {
-            query = query.start(afterDocument: last)
+        if index-1 >= 0 {
+            if !lastDocumentSnapshot.isEmpty, let last = lastDocumentSnapshot[index-1].documents.last {
+                query = query.start(afterDocument: last)
+            }
         }
         
+        query.addSnapshotListener { (querySnapshot, err) in
+                if let err = err {
+                    print("Error getting documents: \(err)")
+                } else {
+                    if querySnapshot?.documents.count != 0 {
+                        if let querySnapshot {
+                            self.lastDocumentSnapshot.append(querySnapshot)
+                        }
+                        self.employeeList = []
+                        for document in querySnapshot!.documents {
+                            var data = document.data()
+                            data["document_id"] = document.documentID
+                            self.employeeList.append(data)
+                            print("\(document.documentID) => \(document.data())")
+                        }
+                        completion(true, self.employeeList.count)
+                    } else {
+                        completion(false, self.employeeList.count)
+                    }
+                    
+                }
+        }
+    }
+    
+    /// method to listen changes in firestore and get data
+    func readDataOnChange(completion: @escaping (Bool) -> Void) {
+        let query = db.collection("EmployeeList")
         query
             .addSnapshotListener { querySnapshot, error in
                 guard let documents = querySnapshot?.documents else {
                     print("Error fetching documents: \(error!)")
                     return
                 }
-                self.lastDocumentSnapshot = querySnapshot
                 self.employeeList = []
                 for document in documents {
                     var data = document.data()
