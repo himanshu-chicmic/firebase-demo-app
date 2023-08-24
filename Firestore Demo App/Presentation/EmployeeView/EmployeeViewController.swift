@@ -28,15 +28,14 @@ class EmployeeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureUI()
-        
-        // update labels data on viewDidLoad()
-        updateData()
+        addNavigationItems()
+        setLabelsText()
     }
     
     // MARK: - methods
     
-    func updateData() {
+    /// method to set/update data in labels
+    func setLabelsText() {
         guard let data = employeeData else {
             return
         }
@@ -48,22 +47,24 @@ class EmployeeViewController: UIViewController {
         labelContact.text?.append(": \(data.contact)")
     }
     
-    func configureUI() {
-        let edit = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(addTapped))
-        let trash = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteTapped))
-        
+    /// method to add button items to navigation item
+    func addNavigationItems() {
+        let edit = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editBarButtonTapped))
+        let trash = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteBarButtonTapped))
         navigationItem.rightBarButtonItems = [trash, edit]
     }
     
+    // MARK: - tap actions
+    
     @objc
-    func addTapped() {
+    func editBarButtonTapped() {
         let vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "AddEmployeeViewController") as? AddEmployeeViewController
         vc?.updateData = employeeData
         self.navigationController?.pushViewController(vc!, animated: true)
     }
     
     @objc
-    func deleteTapped() {
+    func deleteBarButtonTapped() {
         firestoreManager.deleteData(docId: employeeData?.documentId ?? "") { completion in
             if completion {
                 self.navigationController?.popViewController(animated: true)

@@ -22,7 +22,7 @@ class ViewController: UIViewController {
         
         configureUI()
         
-        firestoreManager.readDataChanges { complete in
+        firestoreManager.getData { complete in
             if complete {
                 self.tableView.reloadData()
             }
@@ -30,14 +30,28 @@ class ViewController: UIViewController {
     }
     
     // MARK: - methods
+    
     func configureUI() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
     }
     
+    // MARK: - tap actions
+    
     @objc
-    func addTapped() {
+    func addBarButtonTapped() {
         let vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "AddEmployeeViewController") as? AddEmployeeViewController
         self.navigationController?.pushViewController(vc!, animated: true)
     }
+    
+    // MARK: - actions
+    
+    @IBAction func segmentChanged(_ sender: UISegmentedControl) {
+        firestoreManager.getData { complete in
+            if complete {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
 }
 

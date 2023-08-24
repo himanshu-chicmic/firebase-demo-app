@@ -66,13 +66,27 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="xqO-Xv-Gii"/>
                                 </connections>
                             </tableView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="PrB-kD-PZ6">
+                                <rect key="frame" x="24" y="763" width="345" height="32"/>
+                                <segments>
+                                    <segment title="1"/>
+                                    <segment title="2"/>
+                                    <segment title="3"/>
+                                </segments>
+                                <connections>
+                                    <action selector="segmentChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="erT-v3-2TL"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PrB-kD-PZ6" secondAttribute="trailing" constant="24" id="FYh-gP-XC6"/>
                             <constraint firstItem="Vz9-m2-cPA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IJF-mx-jYm"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Vz9-m2-cPA" secondAttribute="bottom" id="SFr-Pi-fGG"/>
                             <constraint firstItem="Vz9-m2-cPA" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Us7-I8-i4V"/>
+                            <constraint firstItem="PrB-kD-PZ6" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="24" id="arw-fj-vE9"/>
+                            <constraint firstItem="Vz9-m2-cPA" firstAttribute="bottom" secondItem="PrB-kD-PZ6" secondAttribute="bottom" constant="24" id="hvS-Ad-H3e"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Vz9-m2-cPA" secondAttribute="trailing" id="qa9-b5-2jR"/>
                         </constraints>
                     </view>

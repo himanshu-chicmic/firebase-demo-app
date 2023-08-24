@@ -23,6 +23,8 @@ struct EmployeeModel: Codable {
         case joinedAs = "joined_as"
     }
     
+    /// method to return model data in dictionary
+    /// - Returns: data in [String: Any]
     func getDataDictionary() -> [String: Any] {
         return [
             "name": name,

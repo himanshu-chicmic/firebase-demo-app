@@ -9,6 +9,8 @@ import UIKit
 
 class TableViewCell: UITableViewCell {
 
+    // MARK: - outlets
+    
     @IBOutlet weak var labelName: UILabel!
     @IBOutlet weak var labelTeam: UILabel!
     
@@ -20,6 +22,8 @@ class TableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
 
+    // MARK: - methods
+    
     func configureCell(data: EmployeeModel) {
         labelName.text = data.name.capitalized
         labelTeam.text = data.team.uppercased()

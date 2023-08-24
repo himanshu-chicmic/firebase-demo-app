@@ -17,22 +17,26 @@ class AddEmployeeViewController: UIViewController {
     @IBOutlet weak var joinedTextField: UITextField!
     @IBOutlet weak var contactTextField: UITextField!
     
-    var updateData: EmployeeModel?
-    
     // MARK: - properties
     
     private let firestoreManager = FirestoreManager.shared
     
+    var updateData: EmployeeModel?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        configureUI()
+        addNavigationItems()
         
         if let data = updateData {
             setTextFieldValues(data: data)
         }
     }
     
+    // MARK: - methods
+    
+    /// method to set data in text fields for update
+    /// - Parameter data: EmployeeModel data
     func setTextFieldValues(data: EmployeeModel) {
         nameTextField.text = data.name.capitalized
         teamTextField.text = data.team.uppercased()
@@ -41,13 +45,16 @@ class AddEmployeeViewController: UIViewController {
         contactTextField.text = data.contact
     }
     
-    func configureUI() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(addTapped))
+    /// method to setup navigation bar
+    func addNavigationItems() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(addBarButtonTapped))
         navigationItem.title = updateData == nil ? "Add Employee" : "Update Details"
     }
     
+    // MARK: - tap actions
+    
     @objc
-    func addTapped() {
+    func addBarButtonTapped() {
         let employeeModel = EmployeeModel(documentId: "", name: nameTextField.text ?? "", team: teamTextField.text ?? "", email: emailTextField.text ?? "", joinedAs: joinedTextField.text ?? "", contact: contactTextField.text ?? "")
         if let updateData {
             firestoreManager.updateData(data: employeeModel.getDataDictionary(), docID: updateData.documentId) { complete in

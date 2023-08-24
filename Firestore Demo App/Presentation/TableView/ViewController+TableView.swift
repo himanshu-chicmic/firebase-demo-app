@@ -8,6 +8,7 @@
 import UIKit
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return firestoreManager.getEmployeeList.count
     }
