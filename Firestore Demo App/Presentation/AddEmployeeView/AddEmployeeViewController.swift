@@ -23,7 +23,8 @@ class AddEmployeeViewController: UIViewController {
     
     var updateData: EmployeeModel?
     
-    var delegate: EmployeeViewDelegate?
+    var delegate: EmployeeViewTableDelegate?
+    var dataSource: EmployeeViewDataDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,10 +58,11 @@ class AddEmployeeViewController: UIViewController {
     
     @objc
     func addBarButtonTapped() {
-        let employeeModel = EmployeeModel(documentId: "", name: nameTextField.text ?? "", team: teamTextField.text ?? "", email: emailTextField.text ?? "", joinedAs: joinedTextField.text ?? "", contact: contactTextField.text ?? "")
+        let employeeModel = EmployeeModel(documentId: updateData?.documentId ?? "", name: nameTextField.text ?? "", team: teamTextField.text ?? "", email: emailTextField.text ?? "", joinedAs: joinedTextField.text ?? "", contact: contactTextField.text ?? "")
         if let updateData {
             firestoreManager.updateData(data: employeeModel.getDataDictionary(), docID: updateData.documentId) { complete in
                 if complete {
+                    self.dataSource?.reloadData(data: employeeModel)
                     self.delegate?.reloadTableView()
                     self.navigationController?.popViewController(animated: true)
                 }

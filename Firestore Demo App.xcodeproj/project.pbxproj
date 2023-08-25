@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6AB05A242A987D6000BA438D /* EmployeeViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB05A232A987D6000BA438D /* EmployeeViewDelegate.swift */; };
+		6AB05A242A987D6000BA438D /* EmployeeViewTableDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB05A232A987D6000BA438D /* EmployeeViewTableDelegate.swift */; };
 		6AB297862A973EF000B80F44 /* AddEmployeeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB297852A973EF000B80F44 /* AddEmployeeViewController.swift */; };
 		6AC56AD12A9717AA005F7C8F /* ViewController+TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC56AD02A9717AA005F7C8F /* ViewController+TableViewCell.swift */; };
 		6AC56AD32A9717D1005F7C8F /* ViewController+TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC56AD22A9717D1005F7C8F /* ViewController+TableView.swift */; };
@@ -25,7 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6AB05A232A987D6000BA438D /* EmployeeViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeeViewDelegate.swift; sourceTree = "<group>"; };
+		6AB05A232A987D6000BA438D /* EmployeeViewTableDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeeViewTableDelegate.swift; sourceTree = "<group>"; };
 		6AB297852A973EF000B80F44 /* AddEmployeeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEmployeeViewController.swift; sourceTree = "<group>"; };
 		6AC56AD02A9717AA005F7C8F /* ViewController+TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+TableViewCell.swift"; sourceTree = "<group>"; };
 		6AC56AD22A9717D1005F7C8F /* ViewController+TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+TableView.swift"; sourceTree = "<group>"; };
@@ -61,7 +61,7 @@
 		6AB05A222A987D5100BA438D /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				6AB05A232A987D6000BA438D /* EmployeeViewDelegate.swift */,
+				6AB05A232A987D6000BA438D /* EmployeeViewTableDelegate.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -308,7 +308,7 @@
 				6AC56AD12A9717AA005F7C8F /* ViewController+TableViewCell.swift in Sources */,
 				6AD6A7142A970F1F0002C263 /* AppDelegate.swift in Sources */,
 				6AC56AD32A9717D1005F7C8F /* ViewController+TableView.swift in Sources */,
-				6AB05A242A987D6000BA438D /* EmployeeViewDelegate.swift in Sources */,
+				6AB05A242A987D6000BA438D /* EmployeeViewTableDelegate.swift in Sources */,
 				6AEB40BB2A971EA4001DFEA0 /* EmployeeViewController.swift in Sources */,
 				6AB297862A973EF000B80F44 /* AddEmployeeViewController.swift in Sources */,
 				6AD6A7162A970F1F0002C263 /* SceneDelegate.swift in Sources */,

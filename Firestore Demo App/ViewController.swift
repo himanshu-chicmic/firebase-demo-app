@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, EmployeeViewDelegate {
+class ViewController: UIViewController, EmployeeViewTableDelegate {
 
     // MARK: - outlets
     

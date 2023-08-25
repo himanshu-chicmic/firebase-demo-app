@@ -8,6 +8,10 @@
 import Foundation
 
 
-protocol EmployeeViewDelegate {
+protocol EmployeeViewTableDelegate {
     func reloadTableView()
+}
+
+protocol EmployeeViewDataDelegate {
+    func reloadData(data: EmployeeModel)
 }

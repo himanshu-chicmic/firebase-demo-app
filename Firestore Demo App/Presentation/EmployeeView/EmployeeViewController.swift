@@ -7,7 +7,7 @@
 
 import UIKit
 
-class EmployeeViewController: UIViewController {
+class EmployeeViewController: UIViewController, EmployeeViewDataDelegate {
     
     // MARK: - outlets
     
@@ -25,16 +25,12 @@ class EmployeeViewController: UIViewController {
     
     private let firestoreManager = FirestoreManager.shared
     
-    var delegate: EmployeeViewDelegate?
+    var delegate: EmployeeViewTableDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         addNavigationItems()
-        setLabelsText()
-    }
-    
-    override func viewDidLayoutSubviews() {
         setLabelsText()
     }
     
@@ -49,8 +45,8 @@ class EmployeeViewController: UIViewController {
         labelName.text = data.name.capitalized
         labelTeam.text = data.team.uppercased()
         labelEmail.text = data.email
-        labelJoinedAs.text?.append(": \(data.joinedAs.capitalized)")
-        labelContact.text?.append(": \(data.contact)")
+        labelJoinedAs.text = "Joined as: \(data.joinedAs.capitalized)"
+        labelContact.text = "Contact: \(data.contact)"
     }
     
     /// method to add button items to navigation item
@@ -60,12 +56,18 @@ class EmployeeViewController: UIViewController {
         navigationItem.rightBarButtonItems = [trash, edit]
     }
     
+    func reloadData(data: EmployeeModel) {
+        employeeData = data
+        setLabelsText()
+    }
+    
     // MARK: - tap actions
     
     @objc
     func editBarButtonTapped() {
         let vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "AddEmployeeViewController") as? AddEmployeeViewController
         vc?.delegate = delegate
+        vc?.dataSource = self
         vc?.updateData = employeeData
         self.navigationController?.pushViewController(vc!, animated: true)
     }
