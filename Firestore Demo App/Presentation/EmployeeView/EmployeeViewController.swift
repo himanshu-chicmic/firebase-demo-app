@@ -25,6 +25,8 @@ class EmployeeViewController: UIViewController {
     
     private let firestoreManager = FirestoreManager.shared
     
+    var delegate: EmployeeViewDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

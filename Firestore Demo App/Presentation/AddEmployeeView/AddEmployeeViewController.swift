@@ -23,6 +23,8 @@ class AddEmployeeViewController: UIViewController {
     
     var updateData: EmployeeModel?
     
+    var delegate: EmployeeViewDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
