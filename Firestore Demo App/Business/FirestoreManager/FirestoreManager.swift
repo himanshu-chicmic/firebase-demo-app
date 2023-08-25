@@ -37,13 +37,15 @@ class FirestoreManager {
                         let decode = try JSONDecoder().decode(EmployeeModel.self, from: encodeData)
                         list.append(decode)
                     } catch {
-                        print(error)
+                        print("Decoding Error \(error)")
                     }
                 }
             }
             return list
         }
     }
+    
+    private var fetchData: Bool = false
     
     // MARK: - methods
     
@@ -83,7 +85,7 @@ class FirestoreManager {
                     print("Error fetching documents: \(error!)")
                     return
                 }
-                if !self.dataEnd && self.lastDocumentSnapshot != querySnapshot?.documents.last, let querySnapshot {
+                if !self.fetchData && !self.dataEnd && self.lastDocumentSnapshot != querySnapshot?.documents.last, let querySnapshot {
                     self.lastDocumentSnapshot = querySnapshot.documents.last
                     
                     if documents.count < limit {
@@ -107,11 +109,17 @@ class FirestoreManager {
     /// - Parameters:
     ///   - data: data to add
     func addData(data: [String: Any], completion: @escaping (Bool) -> Void) {
-        db.collection("EmployeeList").document().setData(data) { err in
+        fetchData = true
+        let documentReference = db.collection("EmployeeList").document()
+        documentReference.setData(data) { err in
             if let err = err {
                 print("Error writing document: \(err)")
             } else {
+                var d = data
+                d["document_id"] = documentReference.documentID
+                self.employeeList.insert(d, at: 0)
                 print("Document successfully written!")
+                self.fetchData = false
                 completion(true)
             }
         }
@@ -122,11 +130,22 @@ class FirestoreManager {
     ///   - data: data to update
     ///   - docID: id of document
     func updateData(data: [String: Any], docID: String, completion: @escaping (Bool) -> Void) {
+        fetchData = true
         db.collection("EmployeeList").document(docID).setData(data) { err in
             if let err = err {
                 print("Error writing document: \(err)")
             } else {
+                for (index, list) in self.employeeList.enumerated() {
+                    if let id = list["document_id"] as? String {
+                        if id == docID {
+                            self.employeeList[index] = data
+                            self.employeeList[index]["document_id"] = docID
+                            break
+                        }
+                    }
+                }
                 print("Document successfully updated!")
+                self.fetchData = false
                 completion(true)
             }
         }
@@ -136,11 +155,21 @@ class FirestoreManager {
     /// - Parameters:
     ///   - docId: document id
     func deleteData(docId: String, completion: @escaping (Bool) -> Void) {
+        fetchData = true
         db.collection("EmployeeList").document(docId).delete { err in
             if let err = err {
                 print("Error deleting document: \(err)")
             } else {
+                for (index, list) in self.employeeList.enumerated() {
+                    if let id = list["document_id"] as? String {
+                        if id == docId {
+                            self.employeeList.remove(at: index)
+                            break
+                        }
+                    }
+                }
                 print("Document successfully deleted!")
+                self.fetchData = false
                 completion(true)
             }
         }

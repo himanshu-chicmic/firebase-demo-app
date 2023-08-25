@@ -34,6 +34,10 @@ class EmployeeViewController: UIViewController {
         setLabelsText()
     }
     
+    override func viewDidLayoutSubviews() {
+        setLabelsText()
+    }
+    
     // MARK: - methods
     
     /// method to set/update data in labels
@@ -61,6 +65,7 @@ class EmployeeViewController: UIViewController {
     @objc
     func editBarButtonTapped() {
         let vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "AddEmployeeViewController") as? AddEmployeeViewController
+        vc?.delegate = delegate
         vc?.updateData = employeeData
         self.navigationController?.pushViewController(vc!, animated: true)
     }
@@ -69,6 +74,7 @@ class EmployeeViewController: UIViewController {
     func deleteBarButtonTapped() {
         firestoreManager.deleteData(docId: employeeData?.documentId ?? "") { completion in
             if completion {
+                self.delegate?.reloadTableView()
                 self.navigationController?.popViewController(animated: true)
             }
         }

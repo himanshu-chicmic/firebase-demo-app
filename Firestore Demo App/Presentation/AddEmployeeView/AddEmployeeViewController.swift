@@ -61,12 +61,14 @@ class AddEmployeeViewController: UIViewController {
         if let updateData {
             firestoreManager.updateData(data: employeeModel.getDataDictionary(), docID: updateData.documentId) { complete in
                 if complete {
+                    self.delegate?.reloadTableView()
                     self.navigationController?.popViewController(animated: true)
                 }
             }
         } else {
             firestoreManager.addData(data: employeeModel.getDataDictionary()) { complete in
                 if complete {
+                    self.delegate?.reloadTableView()
                     self.navigationController?.popViewController(animated: true)
                 }
             }
