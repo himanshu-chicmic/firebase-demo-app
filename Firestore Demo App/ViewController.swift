@@ -12,6 +12,7 @@ class ViewController: UIViewController, EmployeeViewTableDelegate {
     // MARK: - outlets
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var refreshData: UIButton!
     
     // MARK: - properties
     
@@ -27,6 +28,7 @@ class ViewController: UIViewController, EmployeeViewTableDelegate {
         firestoreManager.readDataOnChange(limit: limit) { complete in
             if complete {
                 self.tableView.reloadData()
+                self.startListeningDataChangs()
             }
         }
     }
@@ -35,6 +37,19 @@ class ViewController: UIViewController, EmployeeViewTableDelegate {
     
     func configureUI() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
+        
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(callPullToRefresh), for: .valueChanged)
+    }
+    
+    func startListeningDataChangs() {
+        firestoreManager.getData { complete in
+            print(complete)
+            if complete {
+                print(complete)
+                self.refreshData.isHidden = false
+            }
+        }
     }
     
     func reloadTableView() {
@@ -45,11 +60,28 @@ class ViewController: UIViewController, EmployeeViewTableDelegate {
     // MARK: - tap actions
     
     @objc
+    func callPullToRefresh() {
+        firestoreManager.readDataOnChange(limit: limit, refreshed: true) { complete in
+            if complete {
+                self.refreshData.isHidden = true
+                self.tableView.reloadData()
+            }
+            
+            self.tableView.refreshControl?.endRefreshing()
+        }
+    }
+    
+    @objc
     func addBarButtonTapped() {
         let vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "AddEmployeeViewController") as? AddEmployeeViewController
         vc?.delegate = self
         self.navigationController?.pushViewController(vc!, animated: true)
     }
     
+    // MARK: - ib actions
+    
+    @IBAction func refreshData(_ sender: Any) {
+        tableView.refreshControl?.beginRefreshing()
+    }
 }
 

@@ -26,6 +26,8 @@ class FirestoreManager {
     // bool value to check the end of data
     private var dataEnd: Bool = false
     
+    private var getDataFirstTime: Bool = true
+    
     // getter propetry for employee list
     var getEmployeeList: [EmployeeModel] {
         get {
@@ -45,51 +47,60 @@ class FirestoreManager {
         }
     }
     
-    private var fetchData: Bool = false
+    // bool to check if any operation on data is performed
+    private var processingData: Bool = false
     
     // MARK: - methods
     
     /// method to get data from firestore
     func getData(completion: @escaping (Bool) -> Void) {
         let query = db.collection("EmployeeList")
-        query.getDocuments() { (querySnapshot, err) in
+        query.addSnapshotListener { (querySnapshot, err) in
                 if let err = err {
                     print("Error getting documents: \(err)")
                 } else {
-                    self.employeeList = []
-                    for document in querySnapshot!.documents {
-                        var data = document.data()
-                        data["document_id"] = document.documentID
-                        self.employeeList.append(data)
-                        print("\(document.documentID) => \(document.data())")
+                    if !self.getDataFirstTime && !self.processingData {
+                        completion(true)
+                    } else {
+                        self.getDataFirstTime = false
+                        completion(false)
                     }
-                    completion(true)
                 }
         }
     }
     
     /// method to listen changes in firestore and get data
-    func readDataOnChange(limit: Int, completion: @escaping (Bool) -> Void) {
-        
+    /// - Parameters:
+    ///     - limit: limit for data response
+    ///     - refreshsed: bool to check if data is refreshed or not
+    func readDataOnChange(limit: Int, refreshed: Bool = false, completion: @escaping (Bool) -> Void) {
+        processingData = true
         var query = db.collection("EmployeeList").limit(to: limit)
         
-        if let lastDocumentSnapshot {
-            query = query.start(afterDocument: lastDocumentSnapshot)
-        } else {
-            self.employeeList = []
+        if !refreshed {
+            if let lastDocumentSnapshot {
+                query = query.start(afterDocument: lastDocumentSnapshot)
+            } else {
+                self.employeeList = []
+            }
         }
         
         query
-            .addSnapshotListener { querySnapshot, error in
+            .getDocuments { querySnapshot, error in
                 guard let documents = querySnapshot?.documents else {
                     print("Error fetching documents: \(error!)")
                     return
                 }
-                if !self.fetchData && !self.dataEnd && self.lastDocumentSnapshot != querySnapshot?.documents.last, let querySnapshot {
+                if (refreshed || !self.dataEnd) && self.lastDocumentSnapshot != querySnapshot?.documents.last, let querySnapshot {
                     self.lastDocumentSnapshot = querySnapshot.documents.last
                     
                     if documents.count < limit {
                         self.dataEnd = true
+                    }
+                    
+                    if refreshed {
+                        self.dataEnd = false
+                        self.employeeList = []
                     }
                     
                     for document in documents {
@@ -98,6 +109,7 @@ class FirestoreManager {
                         self.employeeList.append(data)
                         print("\(document.documentID) => \(document.data())")
                     }
+                    self.processingData = false
                     completion(true)
                 } else {
                     completion(false)
@@ -109,7 +121,7 @@ class FirestoreManager {
     /// - Parameters:
     ///   - data: data to add
     func addData(data: [String: Any], completion: @escaping (Bool) -> Void) {
-        fetchData = true
+        processingData = true
         let documentReference = db.collection("EmployeeList").document()
         documentReference.setData(data) { err in
             if let err = err {
@@ -119,7 +131,7 @@ class FirestoreManager {
                 d["document_id"] = documentReference.documentID
                 self.employeeList.insert(d, at: 0)
                 print("Document successfully written!")
-                self.fetchData = false
+                self.processingData = false
                 completion(true)
             }
         }
@@ -130,7 +142,7 @@ class FirestoreManager {
     ///   - data: data to update
     ///   - docID: id of document
     func updateData(data: [String: Any], docID: String, completion: @escaping (Bool) -> Void) {
-        fetchData = true
+        processingData = true
         db.collection("EmployeeList").document(docID).setData(data) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -145,7 +157,7 @@ class FirestoreManager {
                     }
                 }
                 print("Document successfully updated!")
-                self.fetchData = false
+                self.processingData = false
                 completion(true)
             }
         }
@@ -155,7 +167,7 @@ class FirestoreManager {
     /// - Parameters:
     ///   - docId: document id
     func deleteData(docId: String, completion: @escaping (Bool) -> Void) {
-        fetchData = true
+        processingData = true
         db.collection("EmployeeList").document(docId).delete { err in
             if let err = err {
                 print("Error deleting document: \(err)")
@@ -169,7 +181,7 @@ class FirestoreManager {
                     }
                 }
                 print("Document successfully deleted!")
-                self.fetchData = false
+                self.processingData = false
                 completion(true)
             }
         }
