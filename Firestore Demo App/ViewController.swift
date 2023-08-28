@@ -43,7 +43,7 @@ class ViewController: UIViewController, EmployeeViewTableDelegate {
     }
     
     func startListeningDataChangs() {
-        firestoreManager.getData { complete in
+        firestoreManager.readDataUpdates { complete in
             print(complete)
             if complete {
                 print(complete)

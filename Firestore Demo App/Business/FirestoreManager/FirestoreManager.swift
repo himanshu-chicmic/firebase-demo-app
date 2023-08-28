@@ -53,7 +53,7 @@ class FirestoreManager {
     // MARK: - methods
     
     /// method to get data from firestore
-    func getData(completion: @escaping (Bool) -> Void) {
+    func readDataUpdates(completion: @escaping (Bool) -> Void) {
         let query = db.collection("EmployeeList")
         query.addSnapshotListener { (querySnapshot, err) in
                 if let err = err {
@@ -69,14 +69,16 @@ class FirestoreManager {
         }
     }
     
+    
     /// method to listen changes in firestore and get data
     /// - Parameters:
-    ///     - limit: limit for data response
-    ///     - refreshsed: bool to check if data is refreshed or not
+    ///   - limit: limit for api response data
+    ///   - refreshed: boolean to check if the view is refreshed
     func readDataOnChange(limit: Int, refreshed: Bool = false, completion: @escaping (Bool) -> Void) {
         processingData = true
         var query = db.collection("EmployeeList").limit(to: limit)
         
+        // if view is refreshed then don't execute if else block
         if !refreshed {
             if let lastDocumentSnapshot {
                 query = query.start(afterDocument: lastDocumentSnapshot)
@@ -91,13 +93,18 @@ class FirestoreManager {
                     print("Error fetching documents: \(error!)")
                     return
                 }
+                // check required conditions for updating data
                 if (refreshed || !self.dataEnd) && self.lastDocumentSnapshot != querySnapshot?.documents.last, let querySnapshot {
                     self.lastDocumentSnapshot = querySnapshot.documents.last
                     
+                    // if documents.count is less than given limit
+                    // set dataEnd = true
                     if documents.count < limit {
                         self.dataEnd = true
                     }
                     
+                    // if the view's refreshed set employeeList = []
+                    // and set dataEnd = false (in case it's set to true, if all data is already loaded)
                     if refreshed {
                         self.dataEnd = false
                         self.employeeList = []
@@ -109,6 +116,8 @@ class FirestoreManager {
                         self.employeeList.append(data)
                         print("\(document.documentID) => \(document.data())")
                     }
+                    
+                    // completion
                     self.processingData = false
                     completion(true)
                 } else {
