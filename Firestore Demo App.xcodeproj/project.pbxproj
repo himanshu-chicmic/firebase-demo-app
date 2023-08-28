@@ -77,6 +77,7 @@
 		6AB297872A97508000B80F44 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				6AD6A7172A970F1F0002C263 /* ViewController.swift */,
 				6AB05A222A987D5100BA438D /* Protocols */,
 				6AB297892A97509F00B80F44 /* Storyboards */,
 				6AC56ACF2A97178D005F7C8F /* TableView */,
@@ -136,12 +137,11 @@
 			children = (
 				6AB297882A97508700B80F44 /* Business */,
 				6AB297872A97508000B80F44 /* Presentation */,
-				6AD6A7172A970F1F0002C263 /* ViewController.swift */,
-				6AD6A7272A970F960002C263 /* GoogleService-Info.plist */,
 				6AD6A7132A970F1F0002C263 /* AppDelegate.swift */,
 				6AD6A7152A970F1F0002C263 /* SceneDelegate.swift */,
 				6AD6A71C2A970F200002C263 /* Assets.xcassets */,
 				6AD6A7212A970F200002C263 /* Info.plist */,
+				6AD6A7272A970F960002C263 /* GoogleService-Info.plist */,
 			);
 			path = "Firestore Demo App";
 			sourceTree = "<group>";
